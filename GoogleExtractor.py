@@ -13,7 +13,7 @@ class GoogleExtractor:
 		return
 
 	def extract_answer(self, question: str) -> str:
-		query_result = self.query_google(query=question + ":" + self.WIKI_URL, result_prefix='https://' + self.WIKI_URL)
+		query_result = self.query_google(query=question + " site:" + self.WIKI_URL, result_prefix='https://' + self.WIKI_URL)
 
 		if not query_result:
 			raise Exception('No matching answer url found')
@@ -23,7 +23,8 @@ class GoogleExtractor:
 	def query_google(self, query: str, result_contains: str = None, result_prefix: str = None,
 	                 result_postfix: str = None) -> List[str]:
 		query = urllib.parse.quote_plus(query)
-		response = self.get_source(self.GOOGLE_QUERY_URL + query)
+		query = self.GOOGLE_QUERY_URL + query
+		response = self.get_source(query)
 
 		links = list(response.html.absolute_links)
 
