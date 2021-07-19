@@ -7,8 +7,8 @@ import json
 from GoogleUrlExtractor import GoogleUrlExtractor
 from WikiPage import WikiPage
 
-REQUEST_CONTENT_FILE = 'script/request_content.json'
-REQUEST_SCRIPT = 'script/navie.sh'
+REQUEST_CONTENT_FILE = '/Users/navie/Downloads/yufan-flask/script/request_content.json'
+REQUEST_SCRIPT = '/Users/navie/Downloads/yufan-flask/script/navie.sh'
 RESULT_FILE = '/tmp/result.txt'
 
 class Extractor(enum.Enum):
@@ -34,7 +34,8 @@ class AnswerRetriever:
 		return ''
 
 	def prepare_question(self, passage):
-		json.dump(passage, open(REQUEST_CONTENT_FILE, 'w'))
+		with open(REQUEST_CONTENT_FILE, 'w') as f:
+			f.write(json.dumps(passage))
 
 	def send_request(self):
 		subprocess.call(['sh', REQUEST_SCRIPT, REQUEST_CONTENT_FILE])
