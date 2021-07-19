@@ -1,6 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import json
+import nltk
+
 
 def remove_attrs(soup):
     for tag in soup.findAll(recursive=True):
@@ -22,9 +25,9 @@ def capitalize_tags(soup):
 
 
 class WikiPage:
-    def __init__(self, url: str):
+    def __init__(self, url, question):
         self.url = url
-        self.page_identifier = url.split('/')[-1]
+        self.question = question
         self.tokens = []
         self.document_text = ''
         self.long_answer_candidates = []
@@ -55,12 +58,44 @@ class WikiPage:
                 continue
             result += str(tag)
 
-        result = result.replace('\n', '')
-        self.tokens = result.replace('<', ' <').replace('>', '> ').split()
+        result = result .replace('\n', '')
+        # tokens = nltk.word_tokenize(result)
+        # document_text = ' '.join(tokens)
+        #
+        # print(self.tokens)
+        origin_tokens = result.replace('<', ' <').replace('>', '> ').split(' ')
+        tokens = []
+        for token in origin_tokens:
+            if len(token) != 0:
+                if token[0] != '<' or token[-1] != '>':
+                    for new_token in nltk.word_tokenize(token):
+                        tokens.append(new_token)
+                else:
+                    tokens.append(token)
+
+        self.tokens = tokens
 
     def get_document_text(self):
         self.document_text = ' '.join(self.tokens).strip()
 
+    def is_html_tag(self, element):
+        if element[0] == '<' and element[-1] == '>':
+            return True
+        return False
+    def get_document_tokens(self):
+        # regex to get words, loop to get each start and end index
+        res = []
+        for ele in re.finditer(r'\S+', self.document_text):
+            word = self.document_text[ele.start():ele.end()]
+            res.append({
+                "end_byte": ele.end() - 1,
+                "html_token": self.is_html_tag(word),
+                "start_byte": ele.start(),
+                "token": word
+            })
+        # res = [(ele.start(), ele.end() - 1) for ele in re.finditer(r'\S+', self.document_text)]
+
+        return res
     def get_long_answer_candidates(self):
         token_poses = dict()
         start = index = 0
@@ -84,17 +119,25 @@ class WikiPage:
                      'top_level': is_top_level})
                 pos = self.document_text.find(str(tag), pos + 1)
 
-    def document_text_to_tokens(self):
-        document_tokens = []
-        
     def get_data(self):
         self.format_page()
+        tokens = self.get_document_tokens()
         result = {
-            "question_text": "what do the 3 dots mean in math",
+            "question_text": self.question,
             "example_id": "1",
-            "document_text": self.document_text,
             "long_answer_candidates": self.long_answer_candidates,
-            "annotations": []
+            "annotations": [],
+            "document_tokens": tokens,
+            "question_tokens": self.question.split(' ')
         }
 
         return result
+
+
+# if __name__ == '__main__':
+#     question = 'what do the 3 dots mean in math'
+#     urls = scrape_google(question)
+#     if len(urls) != 0:
+#         wikiPage = WikiPage(urls[0], question)
+#         wikiPage.get_data()
+
