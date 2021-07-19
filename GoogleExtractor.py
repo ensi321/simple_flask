@@ -12,7 +12,7 @@ class GoogleExtractor:
 	def __init__(self):
 		return
 
-	def extract_answer(self, question: str) -> str:
+	def extract_answer_url(self, question: str) -> str:
 		query_result = self.query_google(query=question + " site:" + self.WIKI_URL, result_prefix='https://' + self.WIKI_URL)
 
 		if not query_result:
@@ -49,4 +49,4 @@ class GoogleExtractor:
 
 if __name__ == '__main__':
 	g = GoogleExtractor()
-	print(g.extract_answer("who is the US president"))
+	print(g.extract_answer_url("who is the US president"))
