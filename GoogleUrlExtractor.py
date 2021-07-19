@@ -5,7 +5,7 @@ import urllib
 from requests_html import HTMLSession
 
 
-class GoogleExtractor:
+class GoogleUrlExtractor:
 	WIKI_URL = 'en.wikipedia.org'
 	GOOGLE_QUERY_URL = 'https://www.google.com/search?q='
 
@@ -20,8 +20,7 @@ class GoogleExtractor:
 
 		return query_result[0]
 
-	def query_google(self, query: str, result_contains: str = None, result_prefix: str = None,
-	                 result_postfix: str = None) -> List[str]:
+	def query_google(self, query: str, result_contains: str = None, result_prefix: str = None, result_postfix: str = None) -> List[str]:
 		query = urllib.parse.quote_plus(query)
 		query = self.GOOGLE_QUERY_URL + query
 		response = self.get_source(query)
@@ -48,5 +47,5 @@ class GoogleExtractor:
 
 
 if __name__ == '__main__':
-	g = GoogleExtractor()
+	g = GoogleUrlExtractor()
 	print(g.extract_answer_url("who is the US president"))
