@@ -26,7 +26,7 @@ class AnswerRetriever:
 
 		url = self.url_extractor.extract_answer_url(question)
 
-		wiki_page = WikiPage(url)
+		wiki_page = WikiPage(url, question)
 		self.prepare_question(wiki_page.get_data())
 		self.send_request()
 		print(self.retrieve_response())
