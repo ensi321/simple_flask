@@ -85,6 +85,7 @@ class WikiPage:
     def get_document_tokens(self):
         # regex to get words, loop to get each start and end index
         res = []
+        self.tokens = []
         for ele in re.finditer(r'\S+', self.document_text):
             word = self.document_text[ele.start():ele.end()]
             res.append({
@@ -93,6 +94,8 @@ class WikiPage:
                 "start_byte": ele.start(),
                 "token": word
             })
+            self.tokens.append(word)
+
         # res = [(ele.start(), ele.end() - 1) for ele in re.finditer(r'\S+', self.document_text)]
 
         return res
@@ -122,9 +125,10 @@ class WikiPage:
     def get_data(self):
         self.format_page()
         tokens = self.get_document_tokens()
+        self.document_text = ' '.join(self.tokens)
         result = {
             "question_text": self.question,
-            "example_id": "1",
+            "example_id": 1,
             "long_answer_candidates": self.long_answer_candidates,
             "annotations": [],
             "document_tokens": tokens,

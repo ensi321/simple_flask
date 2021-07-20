@@ -20,6 +20,14 @@ class GoogleUrlExtractor:
 
 		return query_result[0]
 
+	def extract_answer_urls(self, question: str) -> list:
+		query_result = self.query_google(query=question + " site:" + self.WIKI_URL, result_prefix='https://' + self.WIKI_URL)
+
+		if not query_result:
+			raise Exception('No matching answer url found')
+
+		return query_result[0:3]
+
 	def query_google(self, query: str, result_contains: str = None, result_prefix: str = None, result_postfix: str = None) -> List[str]:
 		query = urllib.parse.quote_plus(query)
 		query = self.GOOGLE_QUERY_URL + query
