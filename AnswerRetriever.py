@@ -1,4 +1,5 @@
 import subprocess
+from typing import List, Tuple
 
 import Extractor
 import enum

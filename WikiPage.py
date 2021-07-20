@@ -5,6 +5,7 @@ import json
 import nltk
 
 
+nltk.download('punkt')
 def remove_attrs(soup):
     for tag in soup.findAll(recursive=True):
         for attr in [attr for attr in tag.attrs if attr not in ["colspan"]]:
