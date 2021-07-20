@@ -3,6 +3,7 @@ from typing import List
 import requests
 import urllib
 from requests_html import HTMLSession
+import re
 
 
 class GoogleUrlExtractor:
@@ -18,7 +19,7 @@ class GoogleUrlExtractor:
 		if not query_result:
 			raise Exception('No matching answer url found')
 
-		return query_result[0]
+		return re.sub(r'#.+$', '', query_result[0])
 
 	def extract_answer_urls(self, question: str) -> list:
 		query_result = self.query_google(query=question + " site:" + self.WIKI_URL, result_prefix='https://' + self.WIKI_URL)
