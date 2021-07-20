@@ -22,6 +22,7 @@ class AnswerRetriever:
 		if extracter == Extractor.GOOGLE:
 			self.url_extractor = GoogleUrlExtractor()
 
+	# Deprecated
 	def get_answer(self, question: str, url: str) -> dict:
 		if question is None or question == '':
 			raise Exception("Can't take empty string for question")
@@ -53,15 +54,22 @@ class AnswerRetriever:
 		print(answer)
 		return answer
 
+	# Deprecated
 	def prepare_question(self, passage):
 		print("========dump nq question to file========")
 		with open(REQUEST_CONTENT_FILE, 'w') as f:
 			f.write(json.dumps(passage))
 
+	# Deprecated
 	def send_request(self):
 		print("========send request========")
 		subprocess.call(['sh', REQUEST_SCRIPT, REQUEST_CONTENT_FILE])
 
+	# Deprecated
 	def retrieve_response(self):
 		print("========read responses========")
 		return open(RESULT_FILE, 'r').readlines()
+
+	def upload_question_and_url(self, url, question):
+		print("========uploading request========")
+		subprocess.call(['sh', REQUEST_SCRIPT, url, question])

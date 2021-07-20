@@ -16,7 +16,10 @@ def get_answer():
 	question = request.args.get('question')
 	url = request.args.get('url')
 	ar = AnswerRetriever()
-	return ar.get_answer(question, url)
+	# return ar.get_answer(question, url)
+
+	ar.upload_question_and_url(question, url)
+	return ar.retrieve_response()
 
 
 @app.route('/', methods=['GET'])
