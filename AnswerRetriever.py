@@ -29,8 +29,8 @@ class AnswerRetriever:
 
 		wiki_page = WikiPage(url, question)
 		wiki_data = wiki_page.get_data()
-		self.prepare_question(wiki_data)
-		self.send_request()
+		# self.prepare_question(wiki_data)
+		# self.send_request()
 		response = self.retrieve_response()
 		response_dict = ast.literal_eval(list(response)[0])
 
@@ -68,8 +68,10 @@ class AnswerRetriever:
 	# Deprecated
 	def retrieve_response(self):
 		print("========read responses========")
+
 		return open(RESULT_FILE, 'r').readlines()
 
 	def upload_question_and_url(self, url, question):
 		print("========uploading request========")
+		print(url, question)
 		subprocess.call(['sh', REQUEST_SCRIPT, url, question])

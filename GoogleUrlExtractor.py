@@ -27,7 +27,7 @@ class GoogleUrlExtractor:
 		if not query_result:
 			raise Exception('No matching answer url found')
 
-		return query_result[0:5]
+		return query_result[0:10]
 
 	def query_google(self, query: str, result_contains: str = None, result_prefix: str = None, result_postfix: str = None) -> List[str]:
 		query = urllib.parse.quote_plus(query)
