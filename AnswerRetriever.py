@@ -10,7 +10,7 @@ from GoogleUrlExtractor import GoogleUrlExtractor
 from WikiPage import WikiPage
 
 REQUEST_CONTENT_FILE = '/Users/yvetteho/yvette/simple_flask/script/request_content.json'
-REQUEST_SCRIPT = '/Users/yvetteho/yvette/simple_flask/script/navie.sh'
+REQUEST_SCRIPT = '/Users/yvetteho/yvette/simple_flask/script/get_answer.sh'
 RESULT_FILE = '/tmp/result.txt'
 
 
