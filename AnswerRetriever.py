@@ -28,9 +28,7 @@ class AnswerRetriever:
 			raise Exception("Can't take empty string for question")
 
 		wiki_page = WikiPage(url, question)
-		wiki_data = wiki_page.get_data()
-		# self.prepare_question(wiki_data)
-		# self.send_request()
+
 		response = self.retrieve_response()
 		response_dict = ast.literal_eval(list(response)[0])
 

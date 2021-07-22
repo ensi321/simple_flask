@@ -7,54 +7,57 @@ import re
 
 
 class GoogleUrlExtractor:
-	WIKI_URL = 'en.wikipedia.org'
-	GOOGLE_QUERY_URL = 'https://www.google.com/search?q='
+    WIKI_URL = 'en.wikipedia.org'
+    GOOGLE_QUERY_URL = 'https://www.google.com/search?q='
 
-	def __init__(self):
-		return
+    def __init__(self):
+        return
 
-	def extract_answer_url(self, question: str) -> str:
-		query_result = self.query_google(query=question + " site:" + self.WIKI_URL, result_prefix='https://' + self.WIKI_URL)
+    def extract_answer_url(self, question: str) -> str:
+        query_result = self.query_google(query=question + " site:" + self.WIKI_URL,
+                                         result_prefix='https://' + self.WIKI_URL)
 
-		if not query_result:
-			raise Exception('No matching answer url found')
+        if not query_result:
+            raise Exception('No matching answer url found')
 
-		return re.sub(r'#.+$', '', query_result[0])
+        return re.sub(r'#.+$', '', query_result[0])
 
-	def extract_answer_urls(self, question: str) -> list:
-		query_result = self.query_google(query=question + " site:" + self.WIKI_URL, result_prefix='https://' + self.WIKI_URL)
+    def extract_answer_urls(self, question: str) -> list:
+        query_result = self.query_google(query=question + " site:" + self.WIKI_URL,
+                                         result_prefix='https://' + self.WIKI_URL)
 
-		if not query_result:
-			raise Exception('No matching answer url found')
+        if not query_result:
+            raise Exception('No matching answer url found')
 
-		return query_result[0:10]
+        return list(set([re.sub(r'#.+$', '', el) for el in query_result]))[0:10]
 
-	def query_google(self, query: str, result_contains: str = None, result_prefix: str = None, result_postfix: str = None) -> List[str]:
-		query = urllib.parse.quote_plus(query)
-		query = self.GOOGLE_QUERY_URL + query
-		response = self.get_source(query)
+    def query_google(self, query: str, result_contains: str = None, result_prefix: str = None,
+                     result_postfix: str = None) -> List[str]:
+        query = urllib.parse.quote_plus(query)
+        query = self.GOOGLE_QUERY_URL + query
+        response = self.get_source(query)
 
-		links = list(response.html.absolute_links)
+        links = list(response.html.absolute_links)
 
-		result = []
-		for url in links[:]:
-			if (result_contains is not None and result_contains in url) or \
-					(result_prefix is not None and url.startswith(result_prefix) or
-					 (result_postfix is not None and url.endswith(result_postfix))):
-				result.append(url)
+        result = []
+        for url in links[:]:
+            if (result_contains is not None and result_contains in url) or \
+                    (result_prefix is not None and url.startswith(result_prefix) or
+                     (result_postfix is not None and url.endswith(result_postfix))):
+                result.append(url)
 
-		return result
+        return result
 
-	def get_source(self, url: str):
-		try:
-			session = HTMLSession()
-			response = session.get(url)
-			return response
+    def get_source(self, url: str):
+        try:
+            session = HTMLSession()
+            response = session.get(url)
+            return response
 
-		except requests.exceptions.RequestException as e:
-			print(e)
+        except requests.exceptions.RequestException as e:
+            print(e)
 
 
 if __name__ == '__main__':
-	g = GoogleUrlExtractor()
-	print(g.extract_answer_url("who is the US president"))
+    g = GoogleUrlExtractor()
+    print(g.extract_answer_url("who is the US president"))
