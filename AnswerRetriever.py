@@ -28,15 +28,17 @@ class AnswerRetriever:
 			raise Exception("Can't take empty string for question")
 
 		wiki_page = WikiPage(url, question)
-
+		wiki_page.get_data()
 		response = self.retrieve_response()
 		response_dict = ast.literal_eval(list(response)[0])
 
 		short_answer_dict = response_dict['short_answers'][0]
 		long_answer_dict = response_dict['long_answer']
+
+
 		tokens = wiki_page.tokens
 
-		tokens[int(short_answer_dict['start_token'])] = '<span id="short_answer" style="background-color: green">' + \
+		tokens[int(short_answer_dict['start_token'])] = '<span id="short_answer" style="background-color: Aquamarine">' + \
 														tokens[int(short_answer_dict['start_token'])]
 		tokens[int(short_answer_dict['end_token'])] += '</span>'
 

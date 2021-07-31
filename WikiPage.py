@@ -83,6 +83,7 @@ class WikiPage:
         if element[0] == '<' and element[-1] == '>':
             return True
         return False
+
     def get_document_tokens(self):
         # regex to get words, loop to get each start and end index
         res = []
@@ -100,6 +101,7 @@ class WikiPage:
         # res = [(ele.start(), ele.end() - 1) for ele in re.finditer(r'\S+', self.document_text)]
 
         return res
+
     def get_long_answer_candidates(self):
         token_poses = dict()
         start = index = 0

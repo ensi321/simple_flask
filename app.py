@@ -16,7 +16,7 @@ def get_answer():
 	question = request.args.get('question')
 	url = request.args.get('url')
 	ar = AnswerRetriever()
-	ar.upload_question_and_url(url, question)
+	# ar.upload_question_and_url(url, question)
 	return ar.get_answer(question, url)
 
 
